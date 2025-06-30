@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
-  IsBoolean,
   IsNumber,
   IsOptional,
   IsString,
@@ -46,10 +45,10 @@ export class CreateCourseDto {
   @IsOptional()
   level?: string;
 
-  @ApiProperty({ description: '코스 게시 여부' })
-  @IsBoolean()
+  @ApiProperty({ description: '코스 상태', required: false })
+  @IsString()
   @IsOptional()
-  isPublished?: boolean;
+  status?: string;
 
   @ApiProperty({ description: '코스 카테고리 ID 목록' })
   @IsArray()

@@ -16,9 +16,15 @@ export class CoursesService {
     userId: string,
     createCourseDto: CreateCourseDto,
   ): Promise<Course> {
+    const { categoryIds, ...rest } = createCourseDto;
+
     return this.prisma.course.create({
       data: {
-        ...createCourseDto,
+        ...rest,
+        status: 'DRAFT',
+        categories: {
+          connect: categoryIds.map((id) => ({ id })),
+        },
         instructorId: userId,
       },
     });
