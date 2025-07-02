@@ -2,7 +2,11 @@
 
 import {
   categoriesControllerFindAll,
+  coursesControllerCreate,
   coursesControllerFindAll,
+  coursesControllerFindOne,
+  coursesControllerUpdate,
+  UpdateCourseDto,
 } from "@/generated/openapi-client";
 
 export const getAllCategories = async () => {
@@ -21,4 +25,44 @@ export const getAllInstructorCourses = async () => {
     data,
     error,
   };
+};
+
+export const getCourseById = async (id: string) => {
+  const { data, error } = await coursesControllerFindOne({
+    path: {
+      id,
+    },
+  });
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const createCourse = async (title: string) => {
+  const { data, error } = await coursesControllerCreate({
+    body: {
+      title,
+    },
+  });
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const updateCourse = async (
+  id: string,
+  updateCourseDto: UpdateCourseDto
+) => {
+  const { data, error } = await coursesControllerUpdate({
+    path: {
+      id,
+    },
+    body: updateCourseDto,
+  });
+
+  return { data, error };
 };
