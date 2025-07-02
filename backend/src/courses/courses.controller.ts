@@ -11,6 +11,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -19,16 +20,16 @@ import {
 } from '@nestjs/swagger';
 
 import { Prisma } from '@prisma/client';
-
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
-
-import { CoursesService } from './courses.service';
 
 import { CreateCourseDto } from './dto/create-course-dto';
 import { UpdateCourseDto } from './dto/update-course-dto';
 
-import type { Request } from 'express';
+import { CoursesService } from './courses.service';
+
 import { Course as CourseEntity } from 'src/_gen/prisma-class/course';
+
+import type { Request } from 'express';
 
 @ApiTags('코스')
 @Controller('courses')
@@ -108,7 +109,41 @@ export class CoursesController {
   ) {
     const includeArray = include ? include.split(',') : undefined;
 
-    return this.coursesService.findOne(id, includeArray);
+    let includeObject: Prisma.CourseInclude;
+
+    if (
+      includeArray?.includes('sections') &&
+      includeArray?.includes('lectures')
+    ) {
+      const otherInclude = includeArray.filter(
+        (item) => !['sections', 'lectures'].includes(item),
+      );
+      includeObject = {
+        sections: {
+          include: {
+            lectures: {
+              orderBy: {
+                order: 'asc',
+              },
+            },
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
+        ...otherInclude.map((item) => ({
+          [item]: true,
+        })),
+      };
+    } else {
+      includeObject = {
+        ...includeArray.map((item) => ({
+          [item]: true,
+        })),
+      } as Prisma.CourseInclude;
+    }
+
+    return this.coursesService.findOne(id, includeObject);
   }
 
   @Patch(':id')
