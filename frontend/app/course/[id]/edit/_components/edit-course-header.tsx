@@ -30,16 +30,16 @@ export default function EditCourseHeader({ course }: { course: Course }) {
 
   return (
     <header className="flex justify-between items-center px-6 py-4 bg-white">
-      <h2 className="text-2xl font-bold">{course?.title}</h2>
+      <h2 className="text-2xl font-bold">{course.title}</h2>
       <div className="flex items-center gap-2">
         <Button
-          disabled={publishCourseMutation.isPending || course?.status === "PUBLISHED"}
+          disabled={publishCourseMutation.isPending || course.status === "PUBLISHED"}
           onClick={() => publishCourseMutation.mutate()}
           size={"lg"}
         >
           {publishCourseMutation.isPending ? (
             <Loader2 size={20} className="animate-spin" />
-          ) : course?.status === "PUBLISHED" ? (
+          ) : course.status === "PUBLISHED" ? (
             <span>제출완료</span>
           ) : (
             <span>제출하기</span>
