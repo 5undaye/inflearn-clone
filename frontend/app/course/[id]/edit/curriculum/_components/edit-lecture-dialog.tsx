@@ -1,12 +1,21 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDropzone } from "react-dropzone";
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { FileVideo } from "lucide-react";
 import * as api from "@/lib/api";
 import { toast } from "sonner";
@@ -37,7 +46,11 @@ const CKEditor = dynamic(() => import("@/components/ckeditor"), {
   ssr: false,
 });
 
-export function EditLectureDialog({ isOpen, onClose, lecture }: EditLectureDialogProps) {
+export function EditLectureDialog({
+  isOpen,
+  onClose,
+  lecture,
+}: EditLectureDialogProps) {
   const queryClient = useQueryClient();
 
   const [form, setForm] = useState<EditLectureForm>({
@@ -90,7 +103,7 @@ export function EditLectureDialog({ isOpen, onClose, lecture }: EditLectureDialo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>강의 수정</DialogTitle>
         </DialogHeader>
@@ -100,7 +113,9 @@ export function EditLectureDialog({ isOpen, onClose, lecture }: EditLectureDialo
             <Input
               id="title"
               value={form.title}
-              onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, title: e.target.value }))
+              }
             />
           </div>
           <div className="space-y-2">
@@ -108,7 +123,11 @@ export function EditLectureDialog({ isOpen, onClose, lecture }: EditLectureDialo
             {/* 업로드 된 강의 미리보기 */}
             {form.videoStorageInfo && (
               <div className="w-full h-auto min-h-[200px]">
-                <video autoPlay={true} controls={true} src={form.videoStorageInfo.cloudFront.url} />
+                <video
+                  autoPlay={true}
+                  controls={true}
+                  src={form.videoStorageInfo.cloudFront.url}
+                />
               </div>
             )}
 
@@ -132,8 +151,8 @@ export function EditLectureDialog({ isOpen, onClose, lecture }: EditLectureDialo
                   {form.videoStorageInfo
                     ? `선택된 파일: ${form.videoStorageInfo.fileName}`
                     : isDragActive
-                    ? "파일을 여기에 놓아주세요"
-                    : "클릭하거나 파일을 드래그하여 업로드하세요"}
+                      ? "파일을 여기에 놓아주세요"
+                      : "클릭하거나 파일을 드래그하여 업로드하세요"}
                 </p>
               </div>
             </div>
@@ -142,7 +161,9 @@ export function EditLectureDialog({ isOpen, onClose, lecture }: EditLectureDialo
             <Label htmlFor="note">수업 노트</Label>
             <CKEditor
               value={form.description}
-              onChange={(value) => setForm((prev) => ({ ...prev, description: value }))}
+              onChange={(value) =>
+                setForm((prev) => ({ ...prev, description: value }))
+              }
             />
           </div>
           <div className="flex justify-end space-x-2">
