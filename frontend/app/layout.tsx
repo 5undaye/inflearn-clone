@@ -32,9 +32,15 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <Providers>
-          <SiteHeader profile={profile.data} categories={categories.data ?? []} />
+          <SiteHeader
+            profile={profile.data}
+            categories={categories.data ?? []}
+          />
           <main>{children}</main>
         </Providers>
         <Toaster />

@@ -54,10 +54,13 @@ const CKEditor = dynamic(() => import("@/components/ckeditor"), {
 
 export default function UI({ course }: { course: Course }) {
   const queryClient = useQueryClient();
-  const [courseDescription, setCourseDescription] = useState<string>(course.description || DEFAULT_DESCRIPTION);
+  const [courseDescription, setCourseDescription] = useState<string>(
+    course.description || DEFAULT_DESCRIPTION,
+  );
 
   const updateCourseDescriptionMutation = useMutation({
-    mutationFn: () => api.updateCourse(course.id, { description: courseDescription }),
+    mutationFn: () =>
+      api.updateCourse(course.id, { description: courseDescription }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["course", course.id],
@@ -72,8 +75,14 @@ export default function UI({ course }: { course: Course }) {
   return (
     <div className="w-full flex flex-col items-end gap-2">
       <CKEditor value={courseDescription} onChange={setCourseDescription} />
-      <Button onClick={() => updateCourseDescriptionMutation.mutate()} size="lg" className="font-bold">
-        {updateCourseDescriptionMutation.isPending ? "저장중..." : "상세소개 저장"}
+      <Button
+        onClick={() => updateCourseDescriptionMutation.mutate()}
+        size="lg"
+        className="font-bold"
+      >
+        {updateCourseDescriptionMutation.isPending
+          ? "저장중..."
+          : "상세소개 저장"}
       </Button>
     </div>
   );
