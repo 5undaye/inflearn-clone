@@ -103,12 +103,14 @@ export default function UI({ profile }: { profile: User }) {
                 {image
                   ? "클릭하여 변경"
                   : isDragActive
-                  ? "이미지를 여기에 놓으세요"
-                  : "클릭하거나 이미지를 드래그하여 업로드"}
+                    ? "이미지를 여기에 놓으세요"
+                    : "클릭하거나 이미지를 드래그하여 업로드"}
               </span>
             </div>
           </div>
-          <p className="text-xs text-gray-400 mt-2">최대 5MB, jpg/png/gif 지원</p>
+          <p className="text-xs text-gray-400 mt-2">
+            최대 5MB, jpg/png/gif 지원
+          </p>
         </div>
         {/* 이름 */}
         <div>
@@ -134,7 +136,11 @@ export default function UI({ profile }: { profile: User }) {
             className="w-full text-md font-bold"
             size={"lg"}
           >
-            {updateProfileMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <span>저장</span>}
+            {updateProfileMutation.isPending ? (
+              <Loader2 size={12} className="animate-spin" />
+            ) : (
+              <span>저장</span>
+            )}
           </Button>
         </div>
       </form>
