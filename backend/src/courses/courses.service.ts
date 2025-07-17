@@ -118,7 +118,7 @@ export class CoursesService {
         if (category) {
             where.categories = {
                 some: {
-                    id: category,
+                    slug: category,
                 },
             };
         }
