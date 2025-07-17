@@ -5,12 +5,13 @@ import {
   coursesControllerCreate,
   coursesControllerFindAll,
   coursesControllerFindOne,
+  coursesControllerSearch,
   coursesControllerUpdate,
-  CoursesControllerUpdateData,
   lecturesControllerCreate,
   lecturesControllerDelete,
   lecturesControllerUpdate,
   mediaControllerUploadMedia,
+  SearchCourseDto,
   sectionsControllerCreate,
   sectionsControllerDelete,
   sectionsControllerUpdate,
@@ -68,7 +69,10 @@ export const createCourse = async (title: string) => {
   };
 };
 
-export const updateCourse = async (id: string, updateCourseDto: UpdateCourseDto) => {
+export const updateCourse = async (
+  id: string,
+  updateCourseDto: UpdateCourseDto,
+) => {
   const { data, error } = await coursesControllerUpdate({
     path: {
       id,
@@ -136,7 +140,10 @@ export const updateSectionTitle = async (sectionId: string, title: string) => {
   return { data, error };
 };
 
-export const updateLecturePreview = async (lectureId: string, isPreview: boolean) => {
+export const updateLecturePreview = async (
+  lectureId: string,
+  isPreview: boolean,
+) => {
   const { data, error } = await lecturesControllerUpdate({
     path: {
       lectureId,
@@ -149,7 +156,10 @@ export const updateLecturePreview = async (lectureId: string, isPreview: boolean
   return { data, error };
 };
 
-export const updateLecture = async (lectureId: string, updateLectureDto: UpdateLectureDto) => {
+export const updateLecture = async (
+  lectureId: string,
+  updateLectureDto: UpdateLectureDto,
+) => {
   const { data, error } = await lecturesControllerUpdate({
     path: {
       lectureId,
@@ -178,6 +188,14 @@ export const getProfile = async () => {
 export const updateProfile = async (updateUserDto: UpdateUserDto) => {
   const { data, error } = await usersControllerUpdateProfile({
     body: updateUserDto,
+  });
+
+  return { data, error };
+};
+
+export const searchCourses = async (searchCourseDto: SearchCourseDto) => {
+  const { data, error } = await coursesControllerSearch({
+    body: searchCourseDto,
   });
 
   return { data, error };
