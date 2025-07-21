@@ -4,6 +4,7 @@ import { Course } from "@/generated/openapi-client";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface CourseCardProps {
   course: Course;
@@ -23,6 +24,8 @@ function getLevelText(level: string): string {
 }
 
 export default function CourseCard({ course }: CourseCardProps) {
+  const router = useRouter();
+
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -47,7 +50,10 @@ export default function CourseCard({ course }: CourseCardProps) {
   };
 
   return (
-    <div className="group relative cursor-pointer overflow-hidden bg-white transition-all duration-300">
+    <div
+      className="group relative cursor-pointer overflow-hidden bg-white transition-all duration-300"
+      onClick={() => router.push(`/course/${course.id}`)}
+    >
       {/* 썸네일 이미지 */}
       <div className="relative aspect-video overflow-hidden">
         <Image
