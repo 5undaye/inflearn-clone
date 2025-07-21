@@ -3,10 +3,11 @@ import { Course, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import slugify from 'lib/slugify';
 
-import { CreateCourseDto } from './dto/create-course-dto';
-import { UpdateCourseDto } from './dto/update-course-dto';
-import { SearchCourseDto } from './dto/search-course-dto';
-import { SearchCourseResponseDto } from './dto/search-response-dto';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
+import { SearchCourseDto } from './dto/search-course.dto';
+import { SearchCourseResponseDto } from './dto/search-response.dto';
+import { CourseDetailDto } from './dto/course-detail.dto';
 
 @Injectable()
 export class CoursesService {
@@ -35,13 +36,83 @@ export class CoursesService {
         return this.prisma.course.findMany({ skip, take, cursor, where, orderBy });
     }
 
-    async findOne(id: string, include?: Prisma.CourseInclude): Promise<Course | null> {
+    async findOne(id: string): Promise<CourseDetailDto | null> {
         const course = await this.prisma.course.findUnique({
             where: { id },
-            include,
+            include: {
+                instructor: true,
+                categories: true,
+                reviews: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                image: true,
+                            },
+                        },
+                    },
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                },
+                enrollments: true,
+                sections: {
+                    include: {
+                        lectures: {
+                            select: {
+                                id: true,
+                                title: true,
+                                isPreview: true,
+                                duration: true,
+                                order: true,
+                            },
+                            orderBy: {
+                                order: 'asc',
+                            },
+                        },
+                    },
+                },
+                _count: {
+                    select: {
+                        lectures: true,
+                        enrollments: true,
+                        reviews: true,
+                    },
+                },
+            },
         });
 
-        return course;
+        if (!course) {
+            return null;
+        }
+
+        const averageRating =
+            course.reviews.length > 0
+                ? course.reviews.reduce((sum, review) => sum + review.rating, 0) /
+                  course.reviews.length
+                : 0;
+
+        const totalDuration = course.sections.reduce(
+            (sum, section) =>
+                sum +
+                section.lectures.reduce(
+                    (lectureSum, lecture) => lectureSum + lecture.duration || 0,
+                    0,
+                ),
+            0,
+        );
+
+        const result = {
+            ...course,
+            totalEnrollments: course._count.enrollments,
+            averageRating: Math.round(averageRating * 10) / 10,
+            totalReviews: course._count.reviews,
+            totalLectures: course._count.lectures,
+            totalDuration,
+        };
+
+        return result as unknown as CourseDetailDto;
     }
 
     async update(id: string, userId: string, updateCourseDto: UpdateCourseDto): Promise<Course> {
@@ -88,7 +159,6 @@ export class CoursesService {
         return course;
     }
 
-    // 새로 추가된 메서드
     async searchCourses(searchCourseDto: SearchCourseDto): Promise<SearchCourseResponseDto> {
         const { q, category, priceRange, sortBy, order, page, pageSize } = searchCourseDto;
 
