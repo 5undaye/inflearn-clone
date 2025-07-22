@@ -111,7 +111,9 @@ function Header({ course }: { course: CourseDetailDto }) {
               {course.categories[0].name}
             </p>
           )}
-          <h1 className="text-3xl md:text-4xl font-bold mb-3">{course.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3">
+            {course.title}
+          </h1>
           {course.shortDescription && (
             <p className="text-lg text-gray-300 mb-4">
               {course.shortDescription}
@@ -119,16 +121,16 @@ function Header({ course }: { course: CourseDetailDto }) {
           )}
           <div className="flex flex-wrap items-center gap-2 text-sm mb-2">
             <StarRating rating={course.averageRating} />
-            <span className="font-medium">{course.averageRating.toFixed(1)}</span>
+            <span className="font-medium">
+              {course.averageRating.toFixed(1)}
+            </span>
             <span className="text-gray-300">
               ({course.totalReviews}개 수강평)
             </span>
             <span className="hidden md:inline text-gray-300">·</span>
             <span>수강생 {course.totalEnrollments.toLocaleString()}명</span>
           </div>
-          <p className="text-sm text-gray-300">
-            by {course.instructor.name}
-          </p>
+          <p className="text-sm text-gray-300">by {course.instructor.name}</p>
         </div>
       </div>
     </header>
@@ -279,7 +281,10 @@ function ReviewsSection({ reviews }: { reviews: CourseReview[] }) {
       <h2 className="text-2xl font-bold mb-6">수강평</h2>
       <div className="space-y-6">
         {reviews.map((r) => (
-          <div key={r.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+          <div
+            key={r.id}
+            className="border-b border-gray-200 pb-6 last:border-b-0"
+          >
             <div className="flex items-start gap-3">
               {r.user?.image ? (
                 <Image
@@ -481,7 +486,7 @@ export default function CourseDetailUI({
   course: CourseDetailDto;
 }) {
   return (
-    <div className="mx-auto px-4 py-12 pb-24 lg:pb-12">
+    <div className="mx-auto px-4 pb-24 lg:pb-12">
       <Header course={course} />
 
       <div className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10">
