@@ -3,6 +3,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CourseDetailDto extends CourseEntity {
     @ApiProperty({
+        type: Boolean,
+        description: '수강등록 여부',
+    })
+    isEnrolled: boolean;
+
+    @ApiProperty({
         type: Number,
         description: '총 수강생 수',
     })
