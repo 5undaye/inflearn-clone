@@ -20,12 +20,15 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
-import { CreateLectureDto } from './dto/create-lecture.dto';
+
 import { Lecture as LectureEntity } from 'src/_gen/prisma-class/lecture';
-import { Request } from 'express';
-import { UpdateLectureDto } from './dto/update-lecture.dto';
-import { LectureActivity as LectureActivityEntity } from '../_gen/prisma-class/lecture_activity';
+import { LectureActivity as LectureActivityEntity } from 'src/_gen/prisma-class/lecture_activity';
+
+import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureActivityDto } from './dto/update-lecture-activity.dto';
+import { UpdateLectureDto } from './dto/update-lecture.dto';
+
+import type { Request } from 'express';
 
 @ApiTags('개별 강의')
 @Controller('lectures')
