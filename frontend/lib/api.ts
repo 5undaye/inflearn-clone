@@ -4,6 +4,7 @@ import {
   categoriesControllerFindAll,
   coursesControllerAddFavorite,
   coursesControllerCreate,
+  coursesControllerCreateInstructorReply,
   coursesControllerCreateReview,
   coursesControllerDeleteReview,
   coursesControllerEnrollCourse,
@@ -11,14 +12,15 @@ import {
   coursesControllerFindOne,
   coursesControllerGetCourseReviews,
   coursesControllerGetFavorite,
+  coursesControllerGetInstructorReviews,
   coursesControllerGetLectureActivity,
   coursesControllerGetMyFavorites,
   coursesControllerRemoveFavorite,
   coursesControllerSearch,
   coursesControllerUpdate,
-  CoursesControllerUpdateData,
   coursesControllerUpdateReview,
   CreateReviewDto,
+  InstructorReplyDto,
   lecturesControllerCreate,
   lecturesControllerDelete,
   lecturesControllerUpdate,
@@ -336,6 +338,28 @@ export const deleteReview = async (reviewId: string) => {
     path: {
       reviewId,
     },
+  });
+
+  return { data, error };
+};
+
+export const getInstructorReviews = async () => {
+  const { data, error } = await coursesControllerGetInstructorReviews();
+
+  return { data, error };
+};
+
+export const createInstructorReply = async (
+  reviewId: string,
+  instructorReplyDto: InstructorReplyDto,
+) => {
+  console.log(reviewId, instructorReplyDto);
+
+  const { data, error } = await coursesControllerCreateInstructorReply({
+    path: {
+      reviewId,
+    },
+    body: instructorReplyDto,
   });
 
   return { data, error };

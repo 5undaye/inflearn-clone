@@ -637,4 +637,34 @@ export class CoursesService {
 
         return updateReview as unknown as CourseReviewEntity;
     }
+
+    async getInstructorReviews(userId: string): Promise<CourseReviewEntity[]> {
+        const reviews = await this.prisma.courseReview.findMany({
+            where: {
+                course: {
+                    instructorId: userId,
+                },
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        image: true,
+                    },
+                },
+                course: {
+                    select: {
+                        id: true,
+                        title: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        return reviews as unknown as CourseReviewEntity[];
+    }
 }
