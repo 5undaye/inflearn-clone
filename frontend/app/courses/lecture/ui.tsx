@@ -463,26 +463,28 @@ function VideoPlayer({
   return (
     <div ref={wrapperRef} className="relative flex-1 h-full bg-black">
       {/* ReactPlayer maintains 16:9 responsiveness by padding */}
-      <ReactPlayer
-        ref={playerRef}
-        url={videoUrl}
-        playing={playing}
-        muted={muted}
-        volume={volume}
-        width="100%"
-        height="100%"
-        style={{ backgroundColor: "black" }}
-        onProgress={handleProgress}
-        onDuration={setTotalDuration}
-        onEnded={handleEnded}
-        playbackRate={playbackRate}
-        onReady={() => {
-          if (lectureActivity && !hasSeekOnReadyRef.current) {
-            hasSeekOnReadyRef.current = true;
-            playerRef.current?.seekTo(lectureActivity.duration, "seconds");
-          }
-        }}
-      />
+      <div onClick={handlePlayPause} className="relative w-full h-full">
+        <ReactPlayer
+          ref={playerRef}
+          url={videoUrl}
+          playing={playing}
+          muted={muted}
+          volume={volume}
+          width="100%"
+          height="100%"
+          style={{ backgroundColor: "black" }}
+          onProgress={handleProgress}
+          onDuration={setTotalDuration}
+          onEnded={handleEnded}
+          playbackRate={playbackRate}
+          onReady={() => {
+            if (lectureActivity && !hasSeekOnReadyRef.current) {
+              hasSeekOnReadyRef.current = true;
+              playerRef.current?.seekTo(lectureActivity.duration, "seconds");
+            }
+          }}
+        />
+      </div>
 
       {/* Lecture title overlay */}
       <div className="absolute top-2 left-2 flex items-center">
