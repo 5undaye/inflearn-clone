@@ -44,7 +44,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         // 3. 비밀번호 일치 여부 파악하기
-        const passwordMatch = comparePassword(credentials.password as string, user.hashedPassword as string);
+        const passwordMatch = comparePassword(
+          credentials.password as string,
+          user.hashedPassword as string,
+        );
 
         if (!passwordMatch) {
           throw new Error("비밀번호가 일치하지 않습니다.");
@@ -66,5 +69,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   pages: {},
-  callbacks: {},
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        // User is available during sign-in
+        token.id = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      (session as any).user.id = token.id;
+      return session;
+    },
+  },
 });

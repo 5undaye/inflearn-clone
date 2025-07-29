@@ -2,11 +2,23 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Trash2, Lock, LockOpen, Plus, Edit } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Course, Section, Lecture, CourseCategory, LectureActivity } from "@/generated/openapi-client";
+import {
+  Course,
+  Section,
+  Lecture,
+  CourseCategory,
+  LectureActivity,
+} from "@/generated/openapi-client";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import * as api from "@/lib/api";
 import { notFound } from "next/navigation";
@@ -17,13 +29,17 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
   const queryClient = useQueryClient();
 
   // 강의 추가 Dialog 상태
-  const [addLectureSectionId, setAddLectureSectionId] = useState<string | null>(null);
+  const [addLectureSectionId, setAddLectureSectionId] = useState<string | null>(
+    null,
+  );
   const [addLectureTitle, setAddLectureTitle] = useState("");
   const [lectureDialogOpen, setLectureDialogOpen] = useState(false);
   // 섹션 추가 상태
   const [addSectionTitle, setAddSectionTitle] = useState("");
   // 섹션별 임시 제목 상태
-  const [sectionTitles, setSectionTitles] = useState<Record<string, string>>({});
+  const [sectionTitles, setSectionTitles] = useState<Record<string, string>>(
+    {},
+  );
   // 강의 수정 Dialog 상태
   const [editLecture, setEditLecture] = useState<Lecture | null>(null);
   const [isEditLectureDialogOpen, setIsEditLectureDialogOpen] = useState(false);
@@ -80,7 +96,13 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
 
   // 강의 추가
   const addLectureMutation = useMutation({
-    mutationFn: async ({ sectionId, title }: { sectionId: string; title: string }) => {
+    mutationFn: async ({
+      sectionId,
+      title,
+    }: {
+      sectionId: string;
+      title: string;
+    }) => {
       const { data, error } = await api.createLecture(sectionId, title);
 
       if (error) {
@@ -116,7 +138,13 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
 
   // 섹션 제목 수정 mutation
   const updateSectionTitleMutation = useMutation({
-    mutationFn: async ({ sectionId, title }: { sectionId: string; title: string }) => {
+    mutationFn: async ({
+      sectionId,
+      title,
+    }: {
+      sectionId: string;
+      title: string;
+    }) => {
       const { data, error } = await api.updateSectionTitle(sectionId, title);
 
       if (error) {
@@ -161,8 +189,11 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
 
   const toggleLecturePreviewMutation = useMutation({
     mutationFn: async (lecture: Lecture) => {
-      const { data, error } = await api.updateLecturePreview(lecture.id, !lecture.isPreview);
-      console.log(data, error);
+      const { data, error } = await api.updateLecturePreview(
+        lecture.id,
+        !lecture.isPreview,
+      );
+
       if (error) {
         toast.error(error as string);
         return null;
@@ -202,7 +233,9 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
         <div key={section.id} className="border rounded-lg p-4 bg-white w-full">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-green-600 font-semibold">섹션 {sectionIdx + 1}</span>
+              <span className="text-green-600 font-semibold">
+                섹션 {sectionIdx + 1}
+              </span>
               <Input
                 className="w-64"
                 value={sectionTitles[section.id] ?? section.title}
@@ -238,9 +271,14 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
           </div>
           <div className="space-y-2 mt-4">
             {section.lectures?.map((lecture: Lecture, lectureIdx: number) => (
-              <div key={lecture.id} className="flex items-center justify-between px-2 py-2 border rounded-md bg-white">
+              <div
+                key={lecture.id}
+                className="flex items-center justify-between px-2 py-2 border rounded-md bg-white"
+              >
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 w-5 text-center">{lectureIdx + 1}</span>
+                  <span className="text-gray-500 w-5 text-center">
+                    {lectureIdx + 1}
+                  </span>
                   <span className="font-medium">{lecture.title}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -283,14 +321,24 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
             ))}
           </div>
           <div className="mt-3 flex w-full justify-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => openLectureDialog(section.id)} className="bg-gray-50">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => openLectureDialog(section.id)}
+              className="bg-gray-50"
+            >
               <Plus size={16} className="mr-1" /> 수업 추가
             </Button>
           </div>
         </div>
       ))}
       {/* 섹션 추가 */}
-      <Button onClick={handleAddSection} variant="default" size="lg" className="mx-auto text-md font-bold">
+      <Button
+        onClick={handleAddSection}
+        variant="default"
+        size="lg"
+        className="mx-auto text-md font-bold"
+      >
         섹션 추가
       </Button>
 
@@ -307,7 +355,10 @@ export default function UI({ initialCourse }: { initialCourse: Course }) {
             maxLength={200}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setLectureDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setLectureDialogOpen(false)}
+            >
               취소
             </Button>
             <Button onClick={handleAddLecture} variant="default">

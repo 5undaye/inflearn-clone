@@ -4,15 +4,21 @@ import {
   categoriesControllerFindAll,
   coursesControllerAddFavorite,
   coursesControllerCreate,
+  coursesControllerCreateReview,
+  coursesControllerDeleteReview,
   coursesControllerEnrollCourse,
   coursesControllerFindAllMyCourses,
   coursesControllerFindOne,
+  coursesControllerGetCourseReviews,
   coursesControllerGetFavorite,
   coursesControllerGetLectureActivity,
   coursesControllerGetMyFavorites,
   coursesControllerRemoveFavorite,
   coursesControllerSearch,
   coursesControllerUpdate,
+  CoursesControllerUpdateData,
+  coursesControllerUpdateReview,
+  CreateReviewDto,
   lecturesControllerCreate,
   lecturesControllerDelete,
   lecturesControllerUpdate,
@@ -25,6 +31,7 @@ import {
   UpdateCourseDto,
   UpdateLectureActivityDto,
   UpdateLectureDto,
+  UpdateReviewDto,
   UpdateUserDto,
   usersControllerGetProfile,
   usersControllerUpdateProfile,
@@ -208,7 +215,9 @@ export const searchCourses = async (searchCourseDto: SearchCourseDto) => {
 
 export const addFavorite = async (courseId: string) => {
   const { data, error } = await coursesControllerAddFavorite({
-    path: { id: courseId },
+    path: {
+      id: courseId,
+    },
   });
 
   return { data, error };
@@ -216,7 +225,9 @@ export const addFavorite = async (courseId: string) => {
 
 export const removeFavorite = async (courseId: string) => {
   const { data, error } = await coursesControllerRemoveFavorite({
-    path: { id: courseId },
+    path: {
+      id: courseId,
+    },
   });
 
   return { data, error };
@@ -224,7 +235,9 @@ export const removeFavorite = async (courseId: string) => {
 
 export const getFavorite = async (courseId: string) => {
   const { data, error } = await coursesControllerGetFavorite({
-    path: { id: courseId },
+    path: {
+      id: courseId,
+    },
   });
 
   return { data, error };
@@ -251,7 +264,9 @@ export const updateLectureActivity = async (
   updateLectureActivityDto: UpdateLectureActivityDto,
 ) => {
   const { data, error } = await lecturesControllerUpdateLectureActivity({
-    path: { lectureId },
+    path: {
+      lectureId,
+    },
     body: updateLectureActivityDto,
   });
 
@@ -260,7 +275,67 @@ export const updateLectureActivity = async (
 
 export const getAllLectureActivities = async (courseId: string) => {
   const { data, error } = await coursesControllerGetLectureActivity({
-    path: { courseId },
+    path: {
+      courseId,
+    },
+  });
+
+  return { data, error };
+};
+
+export const getCourseReviews = async (
+  courseId: string,
+  page: number,
+  pageSize: number,
+  sort: "latest" | "oldest" | "rating_high" | "rating_low" = "latest",
+) => {
+  const { data, error } = await coursesControllerGetCourseReviews({
+    path: {
+      courseId,
+    },
+    query: {
+      page,
+      pageSize,
+      sort,
+    },
+  });
+
+  return { data, error };
+};
+
+export const createReview = async (
+  courseId: string,
+  createReveiwDto: CreateReviewDto,
+) => {
+  const { data, error } = await coursesControllerCreateReview({
+    path: {
+      courseId,
+    },
+    body: createReveiwDto,
+  });
+
+  return { data, error };
+};
+
+export const updateReview = async (
+  reviewId: string,
+  updateReviewDto: UpdateReviewDto,
+) => {
+  const { data, error } = await coursesControllerUpdateReview({
+    path: {
+      reviewId,
+    },
+    body: updateReviewDto,
+  });
+
+  return { data, error };
+};
+
+export const deleteReview = async (reviewId: string) => {
+  const { data, error } = await coursesControllerDeleteReview({
+    path: {
+      reviewId,
+    },
   });
 
   return { data, error };
