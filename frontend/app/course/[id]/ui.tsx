@@ -175,7 +175,7 @@ function ReviewModal({
     onSuccess: () => {
       toast.success("수강평이 등록되었습니다.");
       setShowReviewModal(false);
-      // window.location.reload();
+      window.location.reload();
     },
   });
 

@@ -245,11 +245,13 @@ function ReviewModal({
   isOpen,
   onClose,
   setShowReviewModal,
+  onReviewCreated,
 }: {
   courseId: string;
   isOpen: boolean;
   onClose: () => void;
   setShowReviewModal: (show: boolean) => void;
+  onReviewCreated?: () => void;
 }) {
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
@@ -270,6 +272,7 @@ function ReviewModal({
     onSuccess: () => {
       toast.success("수강평이 등록되었습니다.");
       setShowReviewModal(false);
+      onReviewCreated && onReviewCreated();
     },
     onError: (error: any) => {
       toast.error(error.message || "수강평 등록에 실패했습니다.");
@@ -341,15 +344,18 @@ function VideoPlayer({
   lecture,
   lectureActivity,
   courseId,
+  hasReviewed,
   user,
 }: {
   lecture: LectureEntity;
   lectureActivity?: LectureActivityEntity;
   courseId: string;
+  hasReviewed: boolean;
   user?: User;
 }) {
   const router = useRouter();
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [hasReviewedLocal, setHasReviewedLocal] = useState(hasReviewed);
 
   const updateLectureActivityMutation = useMutation({
     mutationFn: (updateLectureActivityDto: UpdateLectureActivityDto) =>
@@ -548,7 +554,7 @@ function VideoPlayer({
 
           <div className="flex items-center gap-3">
             {/* 수강평 버튼 */}
-            {user && (
+            {user && !hasReviewedLocal && (
               <button
                 onClick={() => setShowReviewModal(true)}
                 className="flex items-center gap-1 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-md transition-colors"
@@ -594,6 +600,7 @@ function VideoPlayer({
         isOpen={showReviewModal}
         onClose={() => setShowReviewModal(false)}
         setShowReviewModal={setShowReviewModal}
+        onReviewCreated={() => setHasReviewedLocal(true)}
       />
     </div>
   );
@@ -685,6 +692,7 @@ export default function UI({
             (activity) => activity.lectureId === currentLectureId,
           )}
           courseId={course.id}
+          hasReviewed={course.hasReviewed}
           user={user}
         />
 
