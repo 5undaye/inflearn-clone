@@ -107,6 +107,10 @@ export class CoursesService {
             ? !!(await this.prisma.courseEnrollment.findFirst({ where: { userId, courseId: id } }))
             : false;
 
+        const hasReviewed = userId
+            ? !!(await this.prisma.courseReview.findFirst({ where: { userId, courseId: id } }))
+            : false;
+
         const averageRating =
             course.reviews.length > 0
                 ? course.reviews.reduce((sum, review) => sum + review.rating, 0) /
@@ -143,6 +147,7 @@ export class CoursesService {
             totalReviews: course._count.reviews,
             totalLectures: course._count.lectures,
             totalDuration,
+            hasReviewed,
         };
 
         return result as unknown as CourseDetailDto;

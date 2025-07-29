@@ -37,4 +37,10 @@ export class CourseDetailDto extends CourseEntity {
         description: '총 강의 시간(초)',
     })
     totalDuration: number;
+
+    @ApiProperty({
+        type: Boolean,
+        description: '현재 사용자가 리뷰를 작성했는지 여부',
+    })
+    hasReviewed: boolean;
 }
