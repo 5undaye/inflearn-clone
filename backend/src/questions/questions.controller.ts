@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     ParseUUIDPipe,
@@ -72,7 +73,7 @@ export class QuestionsController {
         return this.questionsService.update(req.user.sub, questionId, updateQuestionDto);
     }
 
-    @Put('questions/:questionId')
+    @Delete('questions/:questionId')
     @UseGuards(AccessTokenGuard)
     @ApiBearerAuth('access-token')
     @ApiOkResponse({
