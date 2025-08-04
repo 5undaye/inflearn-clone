@@ -3,7 +3,9 @@ import { PaymentsService } from './payments.service';
 import { AccessTokenGuard } from '../auth/guards/access-token.guard';
 import { VerifyPaymentDto } from './dto/verify-payment.dto';
 import { Request } from 'express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('결제')
 @Controller('payments')
 export class PaymentsController {
     private readonly logger = new Logger(PaymentsController.name);
@@ -12,7 +14,9 @@ export class PaymentsController {
 
     @Post('verify')
     @UseGuards(AccessTokenGuard)
+    @ApiBearerAuth('access-token')
     async verifyPayment(@Body() verifyPaymentDto: VerifyPaymentDto, @Req() req: Request) {
+        console.log('verifyPaymentDto', verifyPaymentDto);
         return this.paymentsService.verifyPayment(verifyPaymentDto, req.user.sub);
     }
 
