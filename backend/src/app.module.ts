@@ -15,25 +15,31 @@ import { QuestionsModule } from './questions/questions.module';
 import { CartsModule } from './carts/carts.module';
 import { PaymentsModule } from './payments/payments.module';
 import { BatchModule } from './batch/batch.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule,
-    PrismaModule,
-    CoursesModule,
-    LecturesModule,
-    SectionsModule,
-    CategoriesModule,
-    MediaModule,
-    UsersModule,
-    CommentsModule,
-    QuestionsModule,
-    CartsModule,
-    PaymentsModule,
-    BatchModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        CacheModule.register({
+            ttl: 60 * 100,
+            max: 1000,
+            isGlobal: true,
+        }),
+        ConfigModule.forRoot({ isGlobal: true }),
+        AuthModule,
+        PrismaModule,
+        CoursesModule,
+        LecturesModule,
+        SectionsModule,
+        CategoriesModule,
+        MediaModule,
+        UsersModule,
+        CommentsModule,
+        QuestionsModule,
+        CartsModule,
+        PaymentsModule,
+        BatchModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
