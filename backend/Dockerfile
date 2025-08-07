@@ -2,7 +2,6 @@ FROM node:20-alpine
 
 RUN npm install -g pnpm
 
-
 ARG NODE_ENV
 ARG DATABASE_URL
 ARG AUTH_SECRET
