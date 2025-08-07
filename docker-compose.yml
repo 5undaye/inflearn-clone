@@ -1,21 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
-    container_name: inflearn-clone-db
-    ports:
-      - '5432:5432'
-    environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prismapass
-      POSTGRES_DB: inflearn_clone
-    volumes:
-      - backend_inflearn_clone_db:/var/lib/postgresql/data
-    networks:
-      - app-network
-    restart: unless-stopped
-
   backend:
     build:
       context: ./backend
@@ -34,6 +19,19 @@ services:
     container_name: inflearn-clone-backend
     ports:
       - 8000:8000
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_MEDIA_S3_BUCKET_NAME=${AWS_MEDIA_S3_BUCKET_NAME}
+      - CLOUDFRONT_DOMAIN=${CLOUDFRONT_DOMAIN}
+      - PORTONE_API_SECRET=${PORTONE_API_SECRET}
+      - PORTONE_WEBHOOK_SECRET=${PORTONE_WEBHOOK_SECRET}
+    depends_on:
+      - postgres
     restart: unless-stopped
     networks:
       - app-network
@@ -50,9 +48,19 @@ services:
         - CLOUDFRONT_DOMAIN=${CLOUDFRONT_DOMAIN}
         - NEXT_PUBLIC_PORTONE_STORE_ID=${NEXT_PUBLIC_PORTONE_STORE_ID}
         - NEXT_PUBLIC_PORTONE_CHANNEL_KEY=${NEXT_PUBLIC_PORTONE_CHANNEL_KEY}
+        - NEXTAUTH_URL=${NEXTAUTH_URL}
     container_name: inflearn-clone-frontend
     ports:
       - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://backend:8000
+      - AUTH_SECRET=${AUTH_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+      - CLOUDFRONT_DOMAIN=${CLOUDFRONT_DOMAIN}
+      - NEXT_PUBLIC_PORTONE_STORE_ID=${NEXT_PUBLIC_PORTONE_STORE_ID}
+      - NEXT_PUBLIC_PORTONE_CHANNEL_KEY=${NEXT_PUBLIC_PORTONE_CHANNEL_KEY}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
     depends_on:
       - backend
       - postgres
@@ -63,7 +71,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  backend_inflearn_clone_db:
-    external: true
