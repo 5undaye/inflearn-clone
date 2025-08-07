@@ -28,6 +28,8 @@ RUN pnpm install
 
 COPY . .
 
+ENV NODE_ENV=production
+
 RUN pnpm prisma generate
 
 RUN pnpm run build
