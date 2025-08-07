@@ -11,7 +11,6 @@ ARG NEXT_PUBLIC_PORTONE_STORE_ID
 ARG NEXT_PUBLIC_PORTONE_CHANNEL_KEY
 ARG NEXTAUTH_URL
 
-
 ENV NODE_ENV=$NODE_ENV
 ENV API_URL=$API_URL
 ENV AUTH_SECRET=$AUTH_SECRET
@@ -28,8 +27,6 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
 COPY . .
-
-ENV NODE_ENV=production
 
 RUN pnpm prisma generate
 
