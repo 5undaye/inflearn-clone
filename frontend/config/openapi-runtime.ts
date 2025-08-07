@@ -3,7 +3,9 @@ import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
 const AUTH_COOKIE_NAME =
-  process.env.NODE_ENV === "production" ? "__Secure-authjs.session-token" : "authjs.session-token";
+  process.env.USE_HTTPS === "true"
+    ? "__Secure-authjs.session-token"
+    : "authjs.session-token";
 
 const API_URL = process.env.API_URL || "http://localhost:8000";
 
