@@ -30,8 +30,6 @@ services:
       - CLOUDFRONT_DOMAIN=${CLOUDFRONT_DOMAIN}
       - PORTONE_API_SECRET=${PORTONE_API_SECRET}
       - PORTONE_WEBHOOK_SECRET=${PORTONE_WEBHOOK_SECRET}
-    depends_on:
-      - postgres
     restart: unless-stopped
     networks:
       - app-network
@@ -63,7 +61,6 @@ services:
       - NEXTAUTH_URL=${NEXTAUTH_URL}
     depends_on:
       - backend
-      - postgres
     restart: unless-stopped
     networks:
       - app-network
